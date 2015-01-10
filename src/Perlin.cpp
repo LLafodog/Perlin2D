@@ -9,9 +9,13 @@ using namespace std;
 
 Perlin::Perlin(int w, int h, int step)
 {
+    /*int wt=81;
+    int ht=81;*/
+    int wt=w-w%step+1;
+    int ht=h-h%step+1;
     m_tab=vector<vector<double>>();
-    m_width=w;
-    m_height=h;
+    m_width=wt;
+    m_height=ht;
     m_step=step;
 
     initTab();
@@ -28,7 +32,7 @@ void Perlin::initTab()
         {
 
 
-            if(i%m_step==0 && j%m_step==0){temp.push_back(random(0,256));}
+            if(i%m_step==0 && j%m_step==0){temp.push_back(random(0,100));}
             else{temp.push_back(0);}
         }
         m_tab.push_back(temp);
@@ -42,6 +46,7 @@ double Perlin::linear_interpolation(double a, double b, double t)
 
 double Perlin::polynomial_interpolation(double a, double b, double t)
 {
+    t*=3.141592653589;
     double u=(1 - cos(t)) * .5;
     return linear_interpolation(a,b,u);
 
@@ -57,23 +62,21 @@ void Perlin::interpolate()
 {
     int Ax,Ay,Bx,By,Cx,Cy,Dx,Dy,Ex,Ey,Fx,Fy;
 
-    for(int i(0);i<m_height-m_step;i++)
+    for(int i(0);i<m_width;i++)
     {
-        for(int j(0);j<m_width-m_step;j++)
+        for(int j(0);j<m_height;j++)
         {
-            if(i%m_step==0  && i!=m_height-1)
+            if(i%m_step==0  && i<m_width)
             {
                 Ay=i;
             }
-            if(j%m_step==0 && j!=m_width-1)
+            if(j%m_step==0  && j<m_height)
             {
                 Ax=j;
             }
 
-
                 By=Ay;
                 Bx=Ax+m_step;
-
 
                 Cx=Ax+m_step;
                 Cy=Ay+m_step;
@@ -83,53 +86,16 @@ void Perlin::interpolate()
 
                 Ex=j;
                 Ey=Ay;
+
                 Fx=j;
                 Fy=Dy;
 
-                // Inter de E
-
-
-
-
-//                if(i==8 && j==8)
-  //              {
-
-                //cout << " 1: " << m_tab[Ax][Ay] << " 2:" << m_tab[Bx][By] << "  3: " << (double)(Ex-Ax)/(double)(Bx-Ax) << " l_p: " << linear_interpolation(m_tab[Ax][Ay],m_tab[Bx][By],(double)(Ex-Ax)/(double)(Bx-Ax))<<endl;
-//                cout << m_tab[Ax][Ay] << "  " << m_tab[Ay][Ax] << endl;
-                //if(inMap(Ex,Ey) && inMap(Ax,Ay) && inMap(Bx,By))
-                //{
-                //if(inMap(Bx,By) && inMap(Cx,Cy) && inMap(Dx,Dy))
+                if(inMap(Cx,Cy))
                 {
                 m_tab[Ex][Ey]=linear_interpolation(m_tab[Ax][Ay],m_tab[Bx][By],(double)(Ex-Ax)/(double)(Bx-Ax));
-                //}else{cout << " 1: " << m_tab[Ax][Ay] << " 2:" << m_tab[Bx][By] << "  3: " << m_tab[Ex][Ey]<<endl;}
-
-                //if(inMap(Fx,Fy) && inMap(Dx,Dy) && inMap(Cx,Cy))
-                //{
                 m_tab[Fx][Fy]=linear_interpolation(m_tab[Dx][Dy],m_tab[Cx][Cy],(double)(Fx-Dx)/(double)(Cx-Dx));
-                //}
-
-                //if(inMap(j,i) && inMap(Ex,Ey) && inMap(Fx,Fy))
-                //{
                 m_tab[j][i]=linear_interpolation(m_tab[Ex][Ey],m_tab[Fx][Fy],(double)(i-Ey)/(double)(Fy-Ey));
-                //}
-
                 }
-                //m_tab[j][i]=11;
-
-
-                /*m_tab[Fx][Fy]=14;
-                m_tab[Ex][Ey]=15;
-
-
-
-                    m_tab[j][i]=22;
-                    m_tab[Ax][Ay]=10;
-                    m_tab[Bx][By]=11;
-                    m_tab[Cx][Cy]=12;
-                    m_tab[Dx][Dy]=13;*/
-    //            }
-
-
         }
     }
 }
@@ -145,7 +111,7 @@ void Perlin::display()
     {
         for(int j(0);j<m_width;j++)
         {
-            cout << m_tab[j][i] << " ";
+            cout << m_tab[i][j] << " ";
         }
         cout << '\n';
     }

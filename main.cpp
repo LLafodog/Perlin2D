@@ -8,9 +8,9 @@
 /// Graphic
 #include<SFML/Graphics.hpp>
 
-#define TS 10
+#define TS 5
 #define NT 100
-#define STEP 20
+#define STEP 10
 
 #define SEA 50
 #define SAND 100
@@ -23,8 +23,8 @@ int main()
 {
     srand(time(NULL));
 
-    Perlin* p=new Perlin(NT,NT,STEP);
-    //p->display(); // numbers
+    Perlin* p=new Perlin(91,58,STEP);
+    p->display(); // numbers
     RectangleShape rc(Vector2f(TS,TS));
     RenderWindow window(  VideoMode((NT-STEP)*TS,TS*(NT-STEP)),"Perlin_2D");
 
@@ -59,12 +59,12 @@ int main()
                 /// GREY
                 rc.setFillColor(Color(value,value,value));
                 /// COLORS
-
+/*
                 if(value<=SEA){rc.setFillColor(Color::Blue);}
                 if(value > SEA && value<=SAND){rc.setFillColor(Color::Yellow);}
                 if(value > SAND && value<=GROUND ){rc.setFillColor(Color::Green);}
                 if(value > GROUND){rc.setFillColor(Color::Black);}
-
+*/
                 ///
                 window.draw(rc);
             }
